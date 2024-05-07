@@ -8,8 +8,6 @@ public class CookbookApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(CookbookApplication.class, args);
-        System.out.println("Test1");
-        System.out.println("Test2");
     }
 
 }
