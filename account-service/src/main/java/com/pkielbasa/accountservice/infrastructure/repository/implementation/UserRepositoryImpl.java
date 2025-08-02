@@ -6,6 +6,8 @@ import com.pkielbasa.accountservice.infrastructure.repository.jpa.UserRepository
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -15,5 +17,20 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User createUser(User user) {
        return userRepositoryJpa.save(user);
+    }
+
+    @Override
+    public Optional<User> getUserById(Long id) {
+        return userRepositoryJpa.findById(id);
+    }
+
+    @Override
+    public boolean checkUsernameExist(String username) {
+        return userRepositoryJpa.existsByUsername(username);
+    }
+
+    @Override
+    public boolean checkEmailExist(String email) {
+        return userRepositoryJpa.existsByEmail(email);
     }
 }

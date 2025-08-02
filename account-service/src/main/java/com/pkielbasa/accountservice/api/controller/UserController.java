@@ -8,10 +8,7 @@ import com.pkielbasa.accountservice.application.service.UserService;
 import com.pkielbasa.accountservice.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -25,8 +22,13 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
-        User newuser = userService.createUser(userMapper.mapToEntity(userRequest));
-        URI location = UriBuilder.generateLocation(newuser.getId());
-        return ResponseEntity.created(location).body(userMapper.mapToResponse(newuser));
+        User newUser = userService.createUser(userMapper.mapToEntity(userRequest));
+        URI location = UriBuilder.generateLocation(newUser.getId());
+        return ResponseEntity.created(location).body(userMapper.mapToResponse(newUser));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userMapper.mapToResponse(userService.getUserById(id)));
     }
 }
