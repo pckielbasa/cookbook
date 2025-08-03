@@ -4,8 +4,11 @@ import com.pkielbasa.accountservice.domain.model.User;
 import com.pkielbasa.accountservice.domain.repository.UserRepository;
 import com.pkielbasa.accountservice.infrastructure.repository.jpa.UserRepositoryJpa;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -32,5 +35,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public boolean checkEmailExist(String email) {
         return userRepositoryJpa.existsByEmail(email);
+    }
+
+    @Override
+    public List<User> getUsers(Specification<User> spec, Sort sort) {
+        return userRepositoryJpa.findAll(spec, sort);
     }
 }

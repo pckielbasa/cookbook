@@ -4,6 +4,7 @@ import com.pkielbasa.accountservice.api.dto.UserRequest;
 import com.pkielbasa.accountservice.api.dto.UserResponse;
 import com.pkielbasa.accountservice.api.mapper.UserMapper;
 import com.pkielbasa.accountservice.api.utils.UriBuilder;
+import com.pkielbasa.accountservice.application.criteria.UserSearchCriteria;
 import com.pkielbasa.accountservice.application.service.UserService;
 import com.pkielbasa.accountservice.domain.model.User;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,5 +32,10 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userMapper.mapToResponse(userService.getUserById(id)));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserResponse>> getUsers(@ModelAttribute UserSearchCriteria userCriteria) {
+        return ResponseEntity.ok(userMapper.mapToResponse(userService.getUsers(userCriteria)));
     }
 }
