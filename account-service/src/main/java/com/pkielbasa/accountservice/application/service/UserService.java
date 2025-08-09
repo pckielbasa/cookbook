@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @RequiredArgsConstructor
 @Service
@@ -44,7 +45,23 @@ public class UserService {
     @Transactional
     public void changePassword(Long id, String newPassword) {
         User user = userValidator.validateAndGetUserById(id);
-        user.setPassword(newPassword);
+        updateIfNotEmpty(newPassword, user::setPassword);
         userRepository.changePassword(user);
+    }
+
+    @Transactional
+    public User update(Long id, User updatedUser) {
+        User user = userValidator.validateAndGetUserById(id);
+
+        updateIfNotEmpty(updatedUser.getEmail(), user::setEmail);
+        updateIfNotEmpty(updatedUser.getUsername(), user::setUsername);
+
+        return userRepository.update(user);
+    }
+
+    private void updateIfNotEmpty(String newValue, Consumer<String> setter) {
+        if (newValue != null && !newValue.isEmpty()) {
+            setter.accept(newValue);
+        }
     }
 }

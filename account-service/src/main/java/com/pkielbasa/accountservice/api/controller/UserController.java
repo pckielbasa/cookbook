@@ -1,5 +1,6 @@
 package com.pkielbasa.accountservice.api.controller;
 
+import com.pkielbasa.accountservice.api.dto.ChangeUserRequest;
 import com.pkielbasa.accountservice.api.dto.PasswordChangeRequest;
 import com.pkielbasa.accountservice.api.dto.UserRequest;
 import com.pkielbasa.accountservice.api.dto.UserResponse;
@@ -40,6 +41,12 @@ public class UserController {
         return ResponseEntity.ok(userMapper.mapToResponse(userService.getUsers(criteria)));
     }
 
+    @PatchMapping("/{id}")
+    ResponseEntity<UserResponse> update(@PathVariable Long id, @RequestBody ChangeUserRequest request) {
+        User updatedUser = userService.update(id, userMapper.mapToUpdate(request));
+        return ResponseEntity.ok(userMapper.mapToResponse(updatedUser));
+    }
+
     @DeleteMapping("/{id}")
     ResponseEntity<?> delete(@PathVariable Long id) {
         userService.delete(id);
@@ -51,4 +58,5 @@ public class UserController {
         userService.changePassword(id, request.password());
         return ResponseEntity.noContent().build();
     }
+
 }

@@ -51,4 +51,9 @@ public class UserRepositoryImpl implements UserRepository {
     public void changePassword(User user) {
         userRepositoryJpa.save(user);
     }
+
+    @Override
+    public User update(User user) {
+        return userRepositoryJpa.save(user);
+    }
 }

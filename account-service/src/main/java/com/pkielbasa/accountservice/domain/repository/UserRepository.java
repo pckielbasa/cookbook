@@ -15,4 +15,5 @@ public interface UserRepository {
     List<User> getUsers(Specification<User> specification, Sort sort);
     void delete(Long id);
     void changePassword(User user);
+    User update(User user);
 }
