@@ -13,4 +13,6 @@ public interface UserRepository {
     boolean checkUsernameExist(String username);
     boolean checkEmailExist(String email);
     List<User> getUsers(Specification<User> specification, Sort sort);
+    void delete(Long id);
+    void changePassword(User user);
 }

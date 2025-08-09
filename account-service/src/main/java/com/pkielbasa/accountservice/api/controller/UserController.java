@@ -1,10 +1,11 @@
 package com.pkielbasa.accountservice.api.controller;
 
+import com.pkielbasa.accountservice.api.dto.PasswordChangeRequest;
 import com.pkielbasa.accountservice.api.dto.UserRequest;
 import com.pkielbasa.accountservice.api.dto.UserResponse;
 import com.pkielbasa.accountservice.api.mapper.UserMapper;
 import com.pkielbasa.accountservice.api.utils.UriBuilder;
-import com.pkielbasa.accountservice.application.criteria.UserSearchCriteria;
+import com.pkielbasa.accountservice.application.search.criteria.UserSearchCriteria;
 import com.pkielbasa.accountservice.application.service.UserService;
 import com.pkielbasa.accountservice.domain.model.User;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +24,31 @@ public class UserController {
     private final UserMapper userMapper;
 
     @PostMapping
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
-        User newUser = userService.createUser(userMapper.mapToEntity(userRequest));
+    ResponseEntity<UserResponse> createUser(@RequestBody UserRequest request) {
+        User newUser = userService.createUser(userMapper.mapToEntity(request));
         URI location = UriBuilder.generateLocation(newUser.getId());
         return ResponseEntity.created(location).body(userMapper.mapToResponse(newUser));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
+    ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userMapper.mapToResponse(userService.getUserById(id)));
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getUsers(@ModelAttribute UserSearchCriteria userCriteria) {
-        return ResponseEntity.ok(userMapper.mapToResponse(userService.getUsers(userCriteria)));
+    ResponseEntity<List<UserResponse>> getUsers(@ModelAttribute UserSearchCriteria criteria) {
+        return ResponseEntity.ok(userMapper.mapToResponse(userService.getUsers(criteria)));
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> delete(@PathVariable Long id) {
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/password")
+    ResponseEntity<?> updatePassword(@PathVariable Long id, @RequestBody PasswordChangeRequest request) {
+        userService.changePassword(id, request.password());
+        return ResponseEntity.noContent().build();
     }
 }

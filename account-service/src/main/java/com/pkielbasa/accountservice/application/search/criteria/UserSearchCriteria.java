@@ -1,4 +1,4 @@
-package com.pkielbasa.accountservice.application.criteria;
+package com.pkielbasa.accountservice.application.search.criteria;
 
 import jakarta.validation.constraints.Email;
 

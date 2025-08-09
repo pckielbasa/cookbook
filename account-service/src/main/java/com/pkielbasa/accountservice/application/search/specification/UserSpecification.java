@@ -1,6 +1,6 @@
-package com.pkielbasa.accountservice.application.specification;
+package com.pkielbasa.accountservice.application.search.specification;
 
-import com.pkielbasa.accountservice.application.criteria.UserSearchCriteria;
+import com.pkielbasa.accountservice.application.search.criteria.UserSearchCriteria;
 import com.pkielbasa.accountservice.domain.model.User;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;

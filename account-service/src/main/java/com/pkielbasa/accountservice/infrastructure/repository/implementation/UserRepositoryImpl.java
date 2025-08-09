@@ -41,4 +41,14 @@ public class UserRepositoryImpl implements UserRepository {
     public List<User> getUsers(Specification<User> spec, Sort sort) {
         return userRepositoryJpa.findAll(spec, sort);
     }
+
+    @Override
+    public void delete(Long id) {
+        userRepositoryJpa.deleteById(id);
+    }
+
+    @Override
+    public void changePassword(User user) {
+        userRepositoryJpa.save(user);
+    }
 }

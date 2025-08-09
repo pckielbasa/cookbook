@@ -1,7 +1,7 @@
-package com.pkielbasa.accountservice.application.utils;
+package com.pkielbasa.accountservice.application.search.sort;
 
 
-import com.pkielbasa.accountservice.application.criteria.UserSearchCriteria;
+import com.pkielbasa.accountservice.application.search.criteria.UserSearchCriteria;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 

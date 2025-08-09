@@ -1,12 +1,12 @@
 package com.pkielbasa.accountservice.application.service;
 
-import com.pkielbasa.accountservice.application.criteria.UserSearchCriteria;
-import com.pkielbasa.accountservice.application.exception.UserNotFoundException;
-import com.pkielbasa.accountservice.application.specification.UserSpecification;
-import com.pkielbasa.accountservice.application.utils.SortUserCriteriaUtils;
+import com.pkielbasa.accountservice.application.search.criteria.UserSearchCriteria;
+import com.pkielbasa.accountservice.application.search.specification.UserSpecification;
+import com.pkielbasa.accountservice.application.search.sort.SortUserCriteriaUtils;
 import com.pkielbasa.accountservice.application.validation.UserValidator;
 import com.pkielbasa.accountservice.domain.model.User;
 import com.pkielbasa.accountservice.domain.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,13 +27,24 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.getUserById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found with id: " +id));
+        return userValidator.validateAndGetUserById(id);
     }
 
     public List<User> getUsers(UserSearchCriteria criteria) {
         Specification<User> specification = UserSpecification.criteria(criteria);
         Sort sort = SortUserCriteriaUtils.buildSort(criteria.sort(), criteria.direction());
         return userRepository.getUsers(specification, sort);
+    }
+
+    public void delete(Long id) {
+        userValidator.validateAndGetUserById(id);
+        userRepository.delete(id);
+    }
+
+    @Transactional
+    public void changePassword(Long id, String newPassword) {
+        User user = userValidator.validateAndGetUserById(id);
+        user.setPassword(newPassword);
+        userRepository.changePassword(user);
     }
 }
